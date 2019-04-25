@@ -26,6 +26,5 @@ func Run(seeds ...Request){
 		for _,item := range parseResult.Items{
 			log.Printf("Got item %v",item)
 		}
-
 	}
 }

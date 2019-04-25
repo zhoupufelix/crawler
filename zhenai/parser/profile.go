@@ -3,37 +3,41 @@ package parser
 import (
 	"crawler/engine"
 	"regexp"
-	"strconv"
 	"crawler/model"
 )
 
-var  ageRe = regexp.MustCompile(`<td width="180"><span class="grayL">年龄：</span>([\d]+)</td>`)
-var marriageRe = regexp.MustCompile(`<td width="180"><span class="grayL">婚况：</span>([^<]+)</td>`)
+var  baseRe = regexp.MustCompile(`<div.*?class="m-btn purple".*?>([^<]+)</div>`)
 
-func ParseProfile(contents []byte)engine.ParseResult{
+func ParseProfile(contents []byte,name string)engine.ParseResult{
 	profile := model.Profile{}
-	match:=ageRe.FindSubmatch(contents)
-	if match != nil{
-		age,err:= strconv.Atoi(extractString(contents,ageRe))
-		if err != nil {
-			profile.Age = age
-		}
+	match:=baseRe.FindAllSubmatch(contents,-1)
+
+	if len(match) > 0  {
+		//profile.Age = string(match[1][1])
+		//profile.Height = string(match[3][1])
+		//profile.Weight = string(match[4][1])
+		profile.Income    = string(match[6][1])
+		profile.Marriage  = string(match[0][1])
+		profile.Education = string(match[8][1])
+		profile.Xinzuo    = string(match[2][1])
+		profile.Hokou     = string(match[5][1])
+		profile.Xinzuo    = string(match[2][1])
 	}
-	profile.Marriage = extractString(contents,marriageRe)
+	profile.Name = name
 	result := engine.ParseResult{
 		Items:[]interface{}{profile},
 	}
 	return result
 }
 
-func extractString(contents []byte,re *regexp.Regexp)string{
-	match :=  marriageRe.FindSubmatch(contents)
-	if len(match) >= 2{
-		return string(match[1])
-	}else{
-		return ""
-	}
-}
+//func extractString(contents []byte,re *regexp.Regexp)string{
+//	match :=  marriageRe.FindSubmatch(contents)
+//	if len(match) >= 2{
+//		return string(match[1])
+//	}else{
+//		return ""
+//	}
+//}
 
 
 
