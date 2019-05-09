@@ -12,7 +12,7 @@ func ParseProfile(contents []byte,name string)engine.ParseResult{
 	profile := model.Profile{}
 	match:=baseRe.FindAllSubmatch(contents,-1)
 
-	if len(match) > 0  {
+	if len(match) >= 9  {
 		//profile.Age = string(match[1][1])
 		//profile.Height = string(match[3][1])
 		//profile.Weight = string(match[4][1])
